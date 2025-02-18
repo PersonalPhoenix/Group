@@ -17,8 +17,13 @@ class ProjectSettings(BaseSettings):
     PATH_TO_APP: str
     APP_NAME: str
 
+    TEST_URL: str
+
     DEFAULT_URL_PREFIX_V1: str
     DEFAULT_TAG_V1: str
+
+    USERS_PREFIX: str
+    USERS_TAG: str
 
     @property
     def get_database_url(cls) -> str:

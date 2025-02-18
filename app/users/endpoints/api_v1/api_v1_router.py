@@ -14,6 +14,8 @@ router = APIRouter(
     tags=[settings.DEFAULT_TAG_V1],
     prefix=settings.DEFAULT_URL_PREFIX_V1
 )
+
+
 router.include_router(
     router=users_router,
 )
