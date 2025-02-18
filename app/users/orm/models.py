@@ -18,3 +18,11 @@ class BaseModel(DeclarativeBase):
         unique=True,
         nullable=False,
     )
+
+
+class Users(BaseModel):
+    ...
+
+
+class Messages(BaseModel):
+    ...
