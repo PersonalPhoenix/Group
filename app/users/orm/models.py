@@ -1,5 +1,11 @@
+from datetime import (
+    datetime,
+)
+
 from sqlalchemy import (
     Integer,
+    DateTime,
+    func,
 )
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -16,6 +22,23 @@ class BaseModel(DeclarativeBase):
         type_=Integer,
         autoincrement=True,
         unique=True,
+        nullable=False,
+    )
+
+    created: Mapped[datetime] = mapped_column(
+        type_=DateTime(
+            timezone=True,
+        ),
+        default=func.now(),
+        nullable=False,
+    )
+
+    updated: Mapped[datetime] = mapped_column(
+        type_=DateTime(
+            timezone=True,
+        ),
+        default=func.now(),
+        onupdate=func.now(),
         nullable=False,
     )
 
