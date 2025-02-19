@@ -6,7 +6,6 @@ from app.config import (
     settings,
 )
 
-
 router = APIRouter(
     tags=[settings.USERS_TAG],
     prefix=settings.USERS_PREFIX,

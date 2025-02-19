@@ -1,0 +1,43 @@
+ [project]
+ # Базовые настройки ruff.
+ name = "ruff"
+ version = "0.8.8"
+ requires-python = ">=3.12"
+ 
+ [tool.ruff]
+ # Исключаем папки.
+ extend-exclude = [
+     "venv",
+     ".venv",
+     ".ruff_cache",
+     "__pycache__",
+     "migrations",
+     "requirements",
+ ]
+ # Исключаем файлы.
+ exclude = [
+     ".gitignore",
+     "*.env",
+     "*.ini",
+     "*.toml",
+     "*.md",
+     "*.txt",
+     "*.pyc",
+     "*.mako",
+     "*.txt",
+ ]
+ # Флаг для включения импортов в проверку.
+ lint.extend-select = ["I"]
+ 
+ [tool.black]
+ # Блок настроек стиля кода по black.
+ target-version = ['py312']
+ line-length = 120
+ 
+ [tool.ruff.format]
+ # Правила форматирования кода.
+ quote-style = "single"
+ indent-style = "space"
+ 
+ [tool.ruff.lint.pydocstyle]
+ convention = "google"

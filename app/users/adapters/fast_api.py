@@ -1,11 +1,10 @@
 from fastapi import (
-    FastAPI,    
+    FastAPI,
 )
 
 from app.users.endpoints.api_v1.api_v1_router import (
     router as api_v1_router,
 )
-
 
 app = FastAPI(
     title='Mini-Chat',

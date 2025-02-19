@@ -29,10 +29,7 @@ class ProjectSettings(BaseSettings):
     def get_database_url(cls) -> str:
         """Формирует из возвращает Database URL."""
 
-        database_url = (
-            f'{cls.ENGINE}+{cls.TYPE}://{cls.DB_USER}:'
-            f'{cls.DB_PASS}@{cls.DB_HOST}:{cls.DB_PORT}/{cls.DB_NAME}'
-        )
+        database_url = f'{cls.ENGINE}+{cls.TYPE}://{cls.DB_USER}:{cls.DB_PASS}@{cls.DB_HOST}:{cls.DB_PORT}/{cls.DB_NAME}'
 
         return database_url
 

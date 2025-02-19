@@ -7,8 +7,6 @@ from alembic import (
 )
 from sqlalchemy import (
     engine_from_config,
-)
-from sqlalchemy import (
     pool,
 )
 
@@ -21,9 +19,8 @@ from app.users.orm.models import (
     Users,
 )
 
-
 config = context.config
-config.set_main_option(name='sqlalchemy.url', value=f'{settings.get_database_url}?async_fallback=True')
+config.set_main_option(name="sqlalchemy.url", value=f"{settings.get_database_url}?async_fallback=True")
 
 
 if config.config_file_name is not None:
@@ -71,9 +68,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
