@@ -2,5 +2,5 @@ class NotFoundUser(Exception):
     pass
 
 
-class UserAlreadyBeenCreated(Exception):
+class UserHasAlreadyBeenCreated(Exception):
     pass

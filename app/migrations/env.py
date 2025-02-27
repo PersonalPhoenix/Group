@@ -1,23 +1,10 @@
-from logging.config import (
-    fileConfig,
-)
+from logging.config import fileConfig
 
-from alembic import (
-    context,
-)
-from sqlalchemy import (
-    engine_from_config,
-    pool,
-)
+from alembic import context
+from sqlalchemy import engine_from_config, pool
 
-from app.config import (
-    settings,
-)
-from app.users.orm.models import (
-    BaseModel,
-    Messages,
-    Users,
-)
+from app.config import settings
+from app.users.orm.models import Users
 
 config = context.config
 config.set_main_option(name="sqlalchemy.url", value=f"{settings.get_database_url}?async_fallback=True")
@@ -27,7 +14,9 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-target_metadata = BaseModel.metadata
+target_metadata = (
+    Users.metadata,
+)
 
 
 def run_migrations_offline() -> None:

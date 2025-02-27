@@ -9,14 +9,16 @@ class Command:
 
 @dataclass
 class CreateUser(Command):
-    id: int
+    tag: str
     email: EmailStr
     password: str
+    role_id: int = 1  #  Enum
 
 
 @dataclass
 class DeleteUserById(Command):
     id: int
+
 
 @dataclass
 class DeleteUserByEmail(Command):
@@ -31,7 +33,8 @@ class EditUser(Command):
 
 @dataclass
 class GetUserByEmail(Command):
-    email: EmailStr    
+    email: EmailStr
+
 
 @dataclass
 class GetUserById(Command):

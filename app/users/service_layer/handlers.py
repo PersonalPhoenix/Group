@@ -1,29 +1,25 @@
-from app.users.domain.commands import (
-    CreateUser,
-    DeleteUserByEmail,
-    DeleteUserById,
-    GetUserByEmail,
-    GetUserById,
-)
-from app.users.domain.models import User
-from app.users.exceptions import NotFoundUser, UserAlreadyBeenCreated
+from app.users.domain.commands import (CreateUser, DeleteUserByEmail,
+                                       DeleteUserById, GetUserByEmail,
+                                       GetUserById)
+from app.users.exceptions import NotFoundUser, UserHasAlreadyBeenCreated
+from app.users.orm.models import Users
 from app.users.service_layer.unit_of_work import AbstractUnitOfWork
 
 
-def create_user(
+async def create_user(
     cmd: CreateUser,
     uow: AbstractUnitOfWork,
 ):
-    with uow:
-        user = uow.users.get(email=cmd.email)
-        
-        if user is None:
-            user = User(cmd.email, cmd.password)
-            uow.users.add(user)
-        else:
-            raise UserAlreadyBeenCreated
+    async with uow:
+        user = await uow.users.get_by_email(email=cmd.email)
 
-        uow.commit()
+        if user is None:
+            user = Users(**cmd.__dict__)
+            await uow.users.add(user)
+        else:
+            raise UserHasAlreadyBeenCreated
+
+        await uow.commit()
 
 
 def get_user_by_email(
@@ -31,14 +27,12 @@ def get_user_by_email(
     uow: AbstractUnitOfWork,
 ):
     with uow:
-        user = uow.users.get(email=cmd.email)
-        
+        user = uow.users.get_by_email(email=cmd.email)
+
         if user is None:
             raise NotFoundUser
-        
-        user = User(email=user.email)
 
-    return user.get_info()
+    # return user.get_info()
 
 
 def get_user_by_id(
@@ -46,14 +40,12 @@ def get_user_by_id(
     uow: AbstractUnitOfWork,
 ):
     with uow:
-        user = uow.users.get(id=cmd.id)
-        
+        user = uow.users.get_by_id(id=cmd.id)
+
         if user is None:
             raise NotFoundUser
-        
-        user = User(id=user.id)
 
-    return user.get_info()
+    # return user.get_info()
 
 
 def delete_user_by_email(
@@ -61,7 +53,7 @@ def delete_user_by_email(
     uow: AbstractUnitOfWork,
 ):
     with uow:
-        user = uow.users.get(email=cmd.email)
+        user = uow.users.get_by_email(email=cmd.email)
 
         if user is None:
             raise NotFoundUser
@@ -76,17 +68,17 @@ def delete_user_by_id(
     uow: AbstractUnitOfWork,
 ):
     with uow:
-        user = uow.users.get(id=cmd.id)
-        
+        user = uow.users.get_by_id(id=cmd.id)
+
         if user is None:
             raise NotFoundUser
-        
+
         uow.users.delete_by_id(user)
-        
+
         uow.commit()
 
 
-COMMAND_HADLERS = {
+COMMAND_HANDLERS = {
     CreateUser: create_user,
     GetUserById: get_user_by_id,
     GetUserByEmail: get_user_by_email,
