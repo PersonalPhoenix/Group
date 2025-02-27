@@ -31,11 +31,6 @@ class ProjectSettings(BaseSettings):
 
         return database_url
 
-    @property
-    def get_api_url(cls) -> str:
-        """Формирует и возвращает ссылку на API."""
-        return f'http://{cls.DB_HOST}:{cls.DB_PORT}'
-
     class Config:
         env_file = '.env'
 
