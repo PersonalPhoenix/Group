@@ -1,6 +1,0 @@
-# Тут тестируем предметную область
-# def test_create_user():
-# ...
-
-# def test_has_benn_created_user():
-# ...

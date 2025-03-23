@@ -6,7 +6,7 @@
 <br>
 Например:<br>
 <br>
-```uvicorn app.main:app```<br>
+```uvicorn backend.main:backend```<br>
 <br>
 ### Запуск миграций
 
@@ -22,4 +22,4 @@
 
 #### Показать покрытие тестами
 
-```pytest --cov=app --cov-report=term-missing```
+```pytest --cov=backend --cov-report=term-missing```
