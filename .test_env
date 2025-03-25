@@ -2,17 +2,33 @@
 RUN_MODE = debug
 
 [Настройки подключения к postgresql]
-DB_HOST = localhost
-DB_PORT = 5432
-DB_USER = postgres
-DB_PASS = 2841498
-DB_NAME = test_group_db
-ENGINE = postgresql
-TYPE = asyncpg
+POSTGR_DB_HOST = localhost
+POSTGR_DB_PORT = 5432
+POSTGR_DB_USER = postgres
+POSTGR_DB_PASS = 2841498
+POSTGR_DB_NAME = test_group_db
+POSTGR_ENGINE = postgresql
+POSTGR_TYPE = asyncpg
+
+[Настройки подключения к redis]
+REDIS_CONNECTION_METHOD =
+REDIS_HOSTNAME = 127.0.0.1
+REDIS_PASSWORD =
+REDIS_PORT = 6379
+REDIS_DATABASE =
+
+[Настройки подключения к серверу Email]
+EMAIL_HOST =
+EMAIL_PORT =
 
 [Настройки точки входа]
 PATH_TO_APP = backend.users.adapters.fast_api
 APP_NAME = backend
+
+[Настройка токенов JWT]
+JWT_SECRET_KEY=F4685258D6ECD705B0BDF7D1B3701A67D25978FC889338026763D3CC8D1B5B29
+JWT_ALGORITHM=HS256
+JWT_EXPIRES_IN=30
 
 [Настройки url api]
 TEST_URL = http://test

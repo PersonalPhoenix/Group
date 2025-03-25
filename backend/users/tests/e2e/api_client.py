@@ -3,12 +3,12 @@ from typing import Any
 from httpx import AsyncClient
 from pydantic import EmailStr
 
-from backend.users.domain.commands import GetUsersByFilter
+from backend.users.domain.queries import GetUsersByFilter
 
 
-async def post_to_create_user(client: AsyncClient, user_data: EmailStr):
+async def post_to_register_user(client: AsyncClient, user_data: EmailStr):
     response = await client.post(
-        '/users/create',
+        '/users/register',
         json={
             **user_data,
         },

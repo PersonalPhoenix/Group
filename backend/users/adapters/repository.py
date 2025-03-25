@@ -5,11 +5,12 @@ from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from backend.users.domain.events import CreatedUser
 from backend.users.domain.models import User
 from backend.users.orm.models import Users
 
 
-class UserAbstractRepository(ABC):
+class AbstractRepository(ABC):
     """Абстракция, реализующая паттерн "Репозиторий". Реализует интерфейс хранения данных и операций с ними."""
 
     def __init__(self):
@@ -17,6 +18,7 @@ class UserAbstractRepository(ABC):
 
     async def add(self, user: User):
         await self._add(user)
+        # user.events.append(CreatedUser(user.email)) # TODO пристроить оповещение на почту
         self.seen.add(user)
     
     async def delete(self, user: User):
@@ -74,7 +76,7 @@ class UserAbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def _get_by_filter(self) -> Iterable[User]:
+    async def _get_by_filter(self, filter: dict[str, Any]) -> Iterable[User]:
         raise NotImplementedError
 
     @abstractmethod
@@ -89,13 +91,12 @@ class UserAbstractRepository(ABC):
     async def _get_by_tag(self, tag: str) -> Optional[User]:
         raise NotImplementedError
 
-
     @abstractmethod
     async def _delete(self, user: User):
         raise NotImplementedError
 
 
-class UserSqlAlchemyRepository(UserAbstractRepository):
+class UserSqlAlchemyRepository(AbstractRepository):
     """Реализует интерфейс хранения данных и операций с ними с помощью ORM SQLAlchemy."""
 
     def __init__(self, session: AsyncSession):
@@ -108,7 +109,7 @@ class UserSqlAlchemyRepository(UserAbstractRepository):
         await self.session.commit()
 
     async def _get_all(self) -> Iterable[User]:
-        result = await self.session.execute(select(Users))
+        result = await self.session.execute(select(Users).order_by('id'))
     
         return result.scalars().all()
 
@@ -134,5 +135,5 @@ class UserSqlAlchemyRepository(UserAbstractRepository):
         return result.scalars().first()
 
     async def _delete(self, user: User):
-            await self.session.delete(user)
-            await self.session.commit()
+        await self.session.delete(user)
+        await self.session.commit()

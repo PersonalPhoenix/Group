@@ -4,6 +4,7 @@ from fastapi import status
 from sqlalchemy.future import select
 
 from backend.users.orm.models import Users
+from backend.users.service_layer.auth import get_password_hash, verify_password
 from backend.users.service_layer.helpers import compare_matching_keys
 from backend.users.tests.e2e.api_client import (
     delete_user_by_email,
@@ -12,7 +13,7 @@ from backend.users.tests.e2e.api_client import (
     get_to_user_by_email,
     get_to_user_by_id,
     get_users_by_filter,
-    post_to_create_user,
+    post_to_register_user,
 )
 from backend.users.tests.random_refs import generate_test_user_data
 
@@ -72,9 +73,9 @@ async def test_get_user_by_id(session, async_client_api):
     await session.commit()
 
 
-async def test_create_user(session, async_client_api):
+async def test_register_user(session, async_client_api):
     test_user_data = await generate_test_user_data()
-    response = await post_to_create_user(async_client_api, test_user_data)
+    response = await post_to_register_user(async_client_api, test_user_data)
 
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -82,20 +83,22 @@ async def test_create_user(session, async_client_api):
     created_user = users.scalar_one()
     user_fields_data = created_user.to_dict()
 
+    assert verify_password(test_user_data['password'], user_fields_data['password'])
+    del test_user_data['password']
     assert await compare_matching_keys(user_fields_data, test_user_data)
 
     await session.delete(created_user)
     await session.commit()
 
 
-async def test_create_user_if_user_has_been_created(session, async_client_api):
+async def test_register_user_if_user_has_been_created(session, async_client_api):
     test_user_data = await generate_test_user_data()
     user = Users(**test_user_data)
 
     session.add(user)
     await session.commit()
 
-    response = await post_to_create_user(async_client_api, test_user_data)
+    response = await post_to_register_user(async_client_api, test_user_data)
 
     await session.delete(user)
     await session.commit()
